@@ -1,0 +1,23 @@
+{
+  "name": "showit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "./bin/showit",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yosuke Torii <jinjorweb@gmail.com> (https://github.com/jinjor)",
+  "license": "BSD3-Clause",
+  "dependencies": {
+    "argv": "0.0.2",
+    "express": "^4.14.0",
+    "open": "0.0.5",
+    "ws": "^1.1.1"
+  }
+}

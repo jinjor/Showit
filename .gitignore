@@ -1,0 +1,13 @@
+elm-stuff
+.stack-work
+node_modules
+.showit
+
+codemirror
+
+.DS_Store
+docs
+server/public/showit-runtime.js
+server/public/codemirror.js
+server/public/codemirror.css
+server/public/ambiance.css

@@ -1,0 +1,23 @@
+body {
+  display : flex;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.showit-editor-container {
+  height: 100%;
+  border: solid 1px #222;
+  z-index: 1;
+  min-width: 400px;
+}
+.CodeMirror {
+  height: 100%;
+}
+.showit-viewer {
+  margin: auto;
+}
+@media print {
+  .showit-editor-container {
+    display: none;
+  }
+}
