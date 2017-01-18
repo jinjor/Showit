@@ -12,8 +12,9 @@ data Page
 
 
 data Value
-  = String String
+  = StringValue String
   | Node Node
+  | Null
   deriving Show
 
 data Node

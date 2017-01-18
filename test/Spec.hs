@@ -26,5 +26,6 @@ main = do
   parseTest module'   ":def\n  :bar\n    baz\n  hoge\n"
   parseTest module'   ":yey | show\n  .hide(1) | $2"
   parseTest nodeFuncName  ".hide(1)"
+  parseTest nodeFuncName  "[a=1]"
   parseTest animationIndex  "(1)"
   parseTest (expression "")  "1"

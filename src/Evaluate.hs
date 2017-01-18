@@ -6,7 +6,8 @@ import qualified Data.Map as Map
 import qualified ParseAST as P
 import EvaluateAST
 import Debug.Trace
-
+import Text.Read
+import Control.Arrow
 
 type Context =
   Map.Map String FunctionDef
@@ -138,11 +139,11 @@ makeFunction definition = FunctionDef (\context args ->
   let
     (_, localMap) =
       foldl
-        (\(index, map) arg -> (index + 1, Map.insert ("$" ++ show index) (FunctionDef (\_ _ -> Right arg)) map))
+        (\(index, map) arg -> (index + 1, Map.insert (show index) (FunctionDef (\_ _ -> Right arg)) map))
         (1, Map.empty)
         args
 
-    newContext = trace' "makeFunction" $
+    newContext =
       Map.union localMap context
   in
     evalExpression newContext definition
@@ -164,21 +165,19 @@ evalTopExpression context topExpression =
 evalExpression :: Context -> P.Expression -> Either String Value
 evalExpression context expression =
   case expression of
-    P.Func funcName args -> do
-      node <- evalFunc context funcName args
-      Right $ Node node
+    P.Func funcName args ->
+      evalFunc context funcName args
 
     P.Text s ->
       case s of
-        '$' : name -> do
-          node <- evalNormalFunc context s []
-          Right $ Node node
+        '#' : name ->
+          evalNormalFunc context name []
 
         _ ->
-          Right $ String s
+          Right $ StringValue s
 
 
-evalFunc :: Context -> P.FuncName -> [P.Expression] -> Either String Node
+evalFunc :: Context -> P.FuncName -> [P.Expression] -> Either String Value
 evalFunc context funcName args = do
   case funcName of
     P.NormalFuncName name ->
@@ -187,20 +186,20 @@ evalFunc context funcName args = do
       else
         evalNormalFunc context name args
 
-    P.NodeFuncName tagName attrs ->
-      evalNodeFunc context tagName attrs args
+    P.NodeFuncName tagName attrs -> do
+      node <- evalNodeFunc context tagName attrs args
+      return $ Node node
 
 
-evalNormalFunc :: Context -> String -> [P.Expression] -> Either String Node
+evalNormalFunc :: Context -> String -> [P.Expression] -> Either String Value
 evalNormalFunc context name args =
-  case Map.lookup name (trace' ("evalNormalFunc: " ++ name) $ context) of
+  case Map.lookup name context of
     Nothing ->
-      error $ ":" ++ name ++ " is not defined."
+      Right Null
 
     Just (FunctionDef f) -> do
       args_ <- mapM (evalExpression context) args
-      value <- f context args_
-      castToNode value
+      f context args_
 
 
 evalNodeFunc :: Context -> String -> [P.Property] -> [P.Expression] -> Either String Node
@@ -223,8 +222,9 @@ evalProperties context property (classes, attrs) =
           indexInt <-
             case aniIndex of
               Just aniIndex -> do
-                indexValue <- evalExpression context aniIndex
-                castToInt indexValue
+                value <- evalExpression context aniIndex
+                maybeInt <- castToMaybeInt value
+                return $ fromMaybe 0 maybeInt
 
               Nothing ->
                 Right 0
@@ -232,9 +232,12 @@ evalProperties context property (classes, attrs) =
 
         P.Attribute key value -> do
           valueValue <- evalExpression context value
-          valueString <- castToString valueValue
-          evalProperties context xs (classes, (key, valueString) : attrs)
-
+          valueMaybeString <- castToMaybeString valueValue
+          case valueMaybeString of
+            Just valueString ->
+              evalProperties context xs (classes, (key, valueString) : attrs)
+            Nothing ->
+              Right (classes, attrs)
 
 
 -- CAST
@@ -243,7 +246,7 @@ evalProperties context property (classes, attrs) =
 castToNode :: Value -> Either String Node
 castToNode value =
   case value of
-    String s ->
+    StringValue s ->
       Right (TextNode s)
 
     Node node ->
@@ -253,7 +256,7 @@ castToNode value =
 castToString :: Value -> Either String String
 castToString value =
   case value of
-    String s ->
+    StringValue s ->
       Right s
 
     Node (ElementNode _ _ _ _) ->
@@ -263,14 +266,36 @@ castToString value =
       Right s
 
 
+castToMaybeString :: Value -> Either String (Maybe String)
+castToMaybeString value =
+  case value of
+    Null ->
+      Right $ Nothing
+
+    _ -> do
+      s <- castToString value
+      return $ Just s
+
+
 castToInt :: Value -> Either String Int
 castToInt value =
   case value of
-    String s ->
-      Right (read s)
+    StringValue s ->
+      left (\_ -> "expected Int but got " ++ s) $ readEither s
 
     Node (ElementNode _ _ _ _) ->
       Left "expected Int but got ElementNode"
 
     Node (TextNode s) ->
-      Right (read s)
+      left (\_ -> "expected Int but got " ++ s) $ readEither s
+
+
+castToMaybeInt :: Value -> Either String (Maybe Int)
+castToMaybeInt value =
+  case value of
+    Null ->
+      Right $ Nothing
+
+    _ -> do
+      s <- castToInt value
+      return $ Just s

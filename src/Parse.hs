@@ -10,6 +10,7 @@ module Parse
 
 import Text.ParserCombinators.Parsec as Parsec
 import ParseAST
+import Data.Maybe
 
 
 module' :: Parser Module
@@ -120,16 +121,24 @@ funcName =
 normalFuncName :: Parser FuncName
 normalFuncName = do
   char ':'
-  name <- many1 letter
+  name <- many1 (letter <|> digit)
   return $ NormalFuncName name
   <?> "normal func name"
 
 
 nodeFuncName :: Parser FuncName
 nodeFuncName = do
-  attrs <- many1 property
-  return $ NodeFuncName "div" attrs
+  tag <- optionMaybe (try tagName)
+  attrs <- (if tag == Nothing then many1 else many) property
+  return $ NodeFuncName (fromMaybe "div" tag) attrs
   <?> "node func name"
+
+
+tagName :: Parser String
+tagName = do
+  char '$'
+  many1 letter
+  <?> "tag name"
 
 
 property :: Parser Property
@@ -152,11 +161,19 @@ attribute = do
   many (char ' ')
   name <- many1 (letter <|> char '-')
   many (char ' ')
-  exp <- expression ""
+  char '='
+  many (char ' ')
+  exp <- attrValueHelp
   many (char ' ')
   char ']'
   return $ Attribute name exp
   <?> "attribute"
+
+
+attrValueHelp :: Parser Expression
+attrValueHelp = do
+  s <- many1 (noneOf ['\n', '|', '-', ']'])
+  return $ Text (trim s)
 
 
 animationIndex :: Parser Expression
