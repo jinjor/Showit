@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "bin": "./bin/showit",
+  "bin": {
+    "showit": "./bin/showit",
+    "showit-edit": "./bin/showit-edit",
+    "showit-new": "./bin/showit-new"
+  },
   "directories": {
     "doc": "docs",
     "example": "examples",
@@ -17,6 +21,7 @@
   "dependencies": {
     "argv": "0.0.2",
     "express": "^4.14.0",
+    "fs-extra": "^2.0.0",
     "open": "0.0.5",
     "ws": "^1.1.1"
   }

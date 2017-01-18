@@ -7,7 +7,8 @@ codemirror
 
 .DS_Store
 docs
-server/public/showit-runtime.js
-server/public/codemirror.js
-server/public/codemirror.css
-server/public/ambiance.css
+example
+lib/scaffold/showit-runtime.js
+lib/public/codemirror.js
+lib/public/codemirror.css
+lib/public/ambiance.css

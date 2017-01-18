@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>My Slide</title>
+
+  <!-- default style -->
+  <link rel="stylesheet" href="showit.css">
+  <!-- user style -->
+  <link rel="stylesheet" href="style.css">
+  
+  <script type="text/javascript" src="showit-runtime.js"></script>
+  <script type="text/javascript" src="data.js"></script>
+</head>
+<body>
+  <script>
+    var viewer = Elm.Viewer.fullscreen(false);
+    setTimeout(() => {
+      viewer.ports.onData.send(data);
+    });
+  </script>
+</body>
+</html>

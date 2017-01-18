@@ -10,9 +10,9 @@ import Json.Encode as E
 type alias Json = E.Value
 
 
-main : Program Never Model Msg
+main : Program String Model Msg
 main =
-  Platform.program
+  Platform.programWithFlags
     { init = init
     , update = update
     , subscriptions = subscriptions
@@ -40,7 +40,9 @@ port receivedModule : Json -> Cmd msg
 
 
 type alias Model =
-  { waiting : Bool }
+  { waiting : Bool
+  , id : String
+  }
 
 
 
@@ -53,10 +55,22 @@ type Msg
   | ServerMessage String
 
 
-init : (Model, Cmd Msg)
-init =
+
+wsRoot : String -> String
+wsRoot id =
+  "ws://localhost:3001/" ++ id
+
+
+send : String -> String -> Cmd Msg
+send id data =
+  WebSocket.send (wsRoot id) data
+
+
+init : String -> (Model, Cmd Msg)
+init id =
   { waiting = True
-  } ! [ WebSocket.send "ws://localhost:3001" "init" ]
+  , id = id
+  } ! [ send id "init" ]
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -66,7 +80,7 @@ update msg model =
       model ! [ requestText () ]
 
     GotText source ->
-      { model | waiting = True } ! [ WebSocket.send "ws://localhost:3001" source ]
+      { model | waiting = True } ! [ send model.id source ]
 
     ServerMessage data ->
       case D.decodeString decodeMessage data of
@@ -111,7 +125,7 @@ decodeMessage =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ WebSocket.listen "ws://localhost:3001" ServerMessage
+    [ WebSocket.listen (wsRoot model.id) ServerMessage
     , if model.waiting then
         Sub.none
       else

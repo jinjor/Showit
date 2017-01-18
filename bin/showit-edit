@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+var argv = require('argv');
+
+var args = argv.run();
+
+if(!args.targets[0]) {
+  console.log('TODO: show help');
+  return;
+}
+
+require('../lib/server.js').start(args.options, args.targets[0]);

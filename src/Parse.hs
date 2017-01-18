@@ -137,7 +137,9 @@ nodeFuncName = do
 tagName :: Parser String
 tagName = do
   char '$'
-  many1 letter
+  c <- letter
+  cs <- many (letter <|> digit)
+  return $ c : cs
   <?> "tag name"
 
 

@@ -1,3 +1,25 @@
 #!/usr/bin/env node
 
-require('../index.js');
+var path = require('path');
+var spawn = require("child_process").spawn;
+var argv = require('argv');
+
+// argv.option({
+// 	name: 'help',
+// 	short: 'h',
+// 	type : 'string',
+// 	description : 'Show help',
+// 	example: "showit --help"
+// });
+
+var args = argv.run();
+
+var sub = args.targets[0];
+var input = args.targets.slice(1);
+
+if(sub) {
+  spawn('showit-' + sub, input, {stdio: 'inherit'})
+    .on('exit', process.exit);
+} else {
+  console.log('TODO: show help here');
+}
