@@ -2,8 +2,8 @@ name:                showit
 version:             0.1.0.0
 synopsis:            Initial project template from stack
 description:         Please see README.md
-homepage:            https://github.com/jinjor/showit#readme
-license:             BSD3
+homepage:            https://github.com/jinjor/Showit#readme
+license:             BSD3-Clause
 license-file:        LICENSE
 author:              Yosuke Torii
 maintainer:          jinjorweb@gmail.com
@@ -51,4 +51,4 @@ test-suite showit-test
 
 source-repository head
   type:     git
-  location: https://github.com/jinjor/showit
+  location: https://github.com/jinjor/Showit

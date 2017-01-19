@@ -1,7 +1,7 @@
 Showit
 ----
 
-[![Build Status](https://travis-ci.org/jinjor/showit.svg)](https://travis-ci.org/jinjor/showit)
+[![Build Status](https://travis-ci.org/jinjor/Showit.svg)](https://travis-ci.org/jinjor/Showit)
 
 
 WIP
