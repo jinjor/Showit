@@ -1,6 +1,9 @@
 Showit
 ----
 
+[![Build Status](https://travis-ci.org/jinjor/showit.svg)](https://travis-ci.org/jinjor/showit)
+
+
 WIP
 
 
