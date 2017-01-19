@@ -31,6 +31,7 @@ page :: Parser Page
 page = do
   many emptyLine
   topExpressions <- many topExpression
+  spaces
   return $ Page topExpressions
   <?> "page"
 
