@@ -1,6 +1,6 @@
 module Evaluate where
 
-
+import Data.List
 import Data.Maybe
 import qualified Data.Map as Map
 import qualified ParseAST as P
@@ -8,6 +8,7 @@ import EvaluateAST
 import Debug.Trace
 import Text.Read
 import Control.Arrow
+import Data.String.Utils
 
 type Context =
   Map.Map String FunctionDef
@@ -33,6 +34,7 @@ initialContext =
     [ ("image", FunctionDef defImage)
     , ("list", FunctionDef defList)
     , ("link", FunctionDef defLink)
+    , ("pre", FunctionDef defPre)
     ]
 
 
@@ -77,6 +79,18 @@ defLink _ args =
       url <- castToString x
       children <- mapM castToNode xs
       return $ Node $ ElementNode "a" [] [("href", url)] children
+
+
+defPre :: Context -> [Value] -> Either String Value
+defPre _ args = do
+  textNode <- makePreLines args
+  return $ Node $ ElementNode "pre" [] [] [ textNode ]
+
+
+makePreLines :: [Value] -> Either String Node
+makePreLines values = do
+  ss <- mapM castToString values
+  return $ TextNode (intercalate "\\n" ss)
 
 
 
@@ -252,6 +266,9 @@ castToNode value =
     Node node ->
       Right node
 
+    Null ->
+      Left "expected Node but got Null"
+
 
 castToString :: Value -> Either String String
 castToString value =
@@ -264,6 +281,9 @@ castToString value =
 
     Node (TextNode s) ->
       Right s
+
+    Null ->
+      Left "expected String but got Null"
 
 
 castToMaybeString :: Value -> Either String (Maybe String)
@@ -288,6 +308,9 @@ castToInt value =
 
     Node (TextNode s) ->
       left (\_ -> "expected Int but got " ++ s) $ readEither s
+
+    Null ->
+      Left "expected Int but got Null"
 
 
 castToMaybeInt :: Value -> Either String (Maybe Int)

@@ -1,0 +1,12 @@
+elm-stuff
+.stack-work
+node_modules
+.showit
+
+codemirror
+
+.DS_Store
+docs
+example
+src
+test

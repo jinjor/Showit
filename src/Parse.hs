@@ -203,7 +203,9 @@ text = do
   <?> "text"
 
 
-trim = unwords . words
+-- TODO faster logic
+trim s =
+  dropWhile (==' ') $ reverse $ dropWhile (==' ') $ reverse s
 
 
 parse s =

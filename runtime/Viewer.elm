@@ -265,7 +265,14 @@ viewPage editMode windowSize selectedAddress index page =
   page.nodes
     |> List.map (lazy2 viewNode selectedAddress.animation)
     |> div
-      [ class ("page" ++ if selectedAddress.page == index then " page-selected" else "")
+      [ class ("page" ++
+        if index > selectedAddress.page then
+          " page-future"
+        else if index < selectedAddress.page then
+          " page-past"
+        else
+          " page-selected"
+        )
       , style (if editMode then [] else [ ("transform", "scale(" ++ toString (toFloat windowSize.height / 480) ++ ")") ])
       , onClick Next
       ]
@@ -282,7 +289,7 @@ viewNode selectedAnimationIndex node =
         (e.children |> List.map (viewNode selectedAnimationIndex))
 
     TextNode s ->
-      div [] [ text s ]
+      text s
 
 
 makeClasses : Int -> List Class -> List (Html.Attribute msg)

@@ -11,12 +11,22 @@ html {
   padding: 30px;
   font-size: 20px;
   box-sizing: border-box;
-  display: none;
   page-break-after: always;
   margin: auto;
   transform-origin: top;
 }
-.page-selected { display: block; }
+.page {
+  transition: ease 1s;
+}
+.page-selected {
+  display: block;
+}
+.page-future {
+  display: none;
+}
+.page-past {
+  display: none;
+}
 .center { margin-left: auto; margin-right: auto; text-align: center; }
 .title { font-size: 1.5em; font-weight: bold; }
 .center-title {
@@ -36,6 +46,12 @@ html {
 .fade-show { opacity: 1; }
 .hide { display: none; }
 .show { display: block; }
+pre {
+  font-family: Consolas;
+  font-size: 0.8em;
+  padding: 1em 2em;
+  background: #eee;
+}
 @page {
   size: 640px 480px;
   margin: 0;

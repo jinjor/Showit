@@ -21,7 +21,7 @@ main = do
   parseTest module'   ".foo"
   parseTest module'   ".foo(1)"
   parseTest module'   "text"
-  parseTest module'   "text bar"
+  parseTest module'   "text     bar"
   parseTest module'   ":foo\n  :bar\n    baz\n  hoge\n"
   parseTest module'   ":def\n  :bar\n    baz\n  hoge\n"
   parseTest module'   ":yey | show\n  .hide(1) | $2"
