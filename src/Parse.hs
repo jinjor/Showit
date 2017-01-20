@@ -71,17 +71,25 @@ expressionWithIndent = do
 
 expression :: String -> Parser Expression
 expression indent =
-  func indent <|> text
+  func indent <|> textFunc indent
   <?> "expression"
 
 
 func :: String -> Parser Expression
 func indent = do
-  name <- funcName
+  name <- try funcName
   many (char ' ')
   args <- arguments indent
   return $ Func name args
   <?> "function"
+
+
+textFunc :: String -> Parser Expression
+textFunc indent = do
+  name <- text
+  args <- arguments indent
+  return $ Func (NormalFuncName "text") (Text name : args)
+  <?> "text function"
 
 
 arguments :: String -> Parser [Expression]
@@ -94,8 +102,14 @@ arguments indent = do
 inlineArgument :: Parser Expression
 inlineArgument = do
   char '|'
-  text
+  s <- text
+  return $ Text (trim s)
   <?> "inline argument"
+
+
+text :: Parser String
+text = do
+  many1 (noneOf ['\n', '|', '-'])
 
 
 childLines :: String -> Parser [Expression]
@@ -115,7 +129,7 @@ childLine parentIndent = do
 
 funcName :: Parser FuncName
 funcName =
-  normalFuncName <|> try nodeFuncName
+  normalFuncName <|> nodeFuncName
   <?> "function name"
 
 
@@ -194,13 +208,6 @@ animationIndexHelp :: Parser Expression
 animationIndexHelp = do
   s <- many1 (noneOf ['\n', '|', '-', ')'])
   return $ Text (trim s)
-
-
-text :: Parser Expression
-text = do
-  s <- many1 (noneOf ['\n', '|', '-'])
-  return $ Func (NormalFuncName "text") [ Text (trim s) ]
-  <?> "text"
 
 
 -- TODO faster logic

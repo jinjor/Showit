@@ -29,4 +29,4 @@ main = do
   parseTest nodeFuncName  "[a=1]"
   parseTest animationIndex  "(1)"
   parseTest (expression "")  "1"
-  parseTest module' "  "
+  parseTest module' "a|b"
