@@ -199,7 +199,7 @@ animationIndexHelp = do
 text :: Parser Expression
 text = do
   s <- many1 (noneOf ['\n', '|', '-'])
-  return $ Text (trim s)
+  return $ Func (NormalFuncName "text") [ Text (trim s) ]
   <?> "text"
 
 

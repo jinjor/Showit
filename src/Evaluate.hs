@@ -35,6 +35,7 @@ initialContext =
     , ("list", FunctionDef defList)
     , ("link", FunctionDef defLink)
     , ("pre", FunctionDef defPre)
+    , ("text", FunctionDef defText)
     ]
 
 
@@ -91,6 +92,12 @@ makePreLines :: [Value] -> Either String Node
 makePreLines values = do
   ss <- mapM castToString values
   return $ TextNode (intercalate "\\n" ss)
+
+
+defText :: Context -> [Value] -> Either String Value
+defText context args = do
+  strings <- mapM castToString args
+  return $ StringValue $ concat strings
 
 
 
