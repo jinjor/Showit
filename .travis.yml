@@ -16,7 +16,6 @@ install:
 script:
 - stack --no-terminal test --haddock --no-haddock-deps
 before_deploy:
-- npm install elm
 - npm install
 - ./build.sh
 deploy:
