@@ -21,6 +21,7 @@
     "test": "test"
   },
   "scripts": {
+    "prepublish": "elm-make runtime/Viewer.elm runtime/Editor.elm --output=lib/scaffold/showit-runtime.js",
     "install": "node scripts/install.js"
   },
   "files": [
