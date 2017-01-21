@@ -15,7 +15,9 @@ install:
 - stack --no-terminal --install-ghc test --only-dependencies
 script:
 - stack --no-terminal test --haddock --no-haddock-deps
-before_deploy: ./build.sh
+before_deploy:
+- npm install
+- ./build.sh
 deploy:
   provider: releases
   api_key:
