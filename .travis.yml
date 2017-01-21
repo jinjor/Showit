@@ -10,8 +10,7 @@ addons:
 before_install:
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
-- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards
-  --strip-components=1 -C ~/.local/bin '*/stack'
+- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 install:
 - stack --no-terminal --install-ghc test --only-dependencies
 script:
@@ -22,7 +21,7 @@ deploy:
   api_key:
     secure: WUuSyR/m293e8rXIUPMDvPx4IPz8mUQQqV7Z89wt4N6h0eFeOEbc/HIsraj2NhtOSNA4HFIGP/S064C+1E/HxTz1RP5zRJSUVPHDOgeULk1cEKDJMK+GrBPHGiQk2ebhdavwr5WImteh579IwTBQCNPxXWg0ZbwQKyERg1UjG1p/snFN6RitKK11LnVwP8rKVtW0pxC32K4wKghGG6ZkcXgzIMv+0pIQJMCmyfNP9lPeZ0Ra8ISH0lduhuVRGykP+xFPyh3opWNGlc5OtVTkaXBbNk/SDFjTDOZwdM+Ckmy0nvo9FbjOmylZBmj5Kf7iJZ0J6L8BlKdibEj7+IMGCpDHEXqQuV8XJx3yERHfnntMgjflKB+zoA+1wFcsuG1E6qqvb2FhWu9VASJRG7PSkfu9VJgxcu8zNdwJdcwgSvjUQzA3PmDbh1w0HW9+YnCME7Ej3yIGOFyq60ovj9xoSd+QH37TKhyQtCPfMseHsz24G0iiyzeoVV/D+GJhh0FYicz5kyqrnzd6YCiZlHMIKbx1zNWs9jYxEE95xlKvoXEI/uPwpfGGSm3dwjsqLs0azYA9bGSEo/eZQuING2iiOMuedqsd8ZrESSqEXyrcLQsmCbBYgTh2rhm0R7vhkPfYvfRCkFKhtuKyOJyeZMmAvolHbODioUHUt15/cfpXXqU=
   file:
-  - platform/showit-compile-x64-darwin
+  - platform/showit-compile-amd64-linux
   skip_cleanup: true
   on:
     repo: jinjor/Showit
