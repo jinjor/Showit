@@ -2,7 +2,8 @@ var request = require('request');
 var fs = require('fs-extra');
 var platform = require('../lib/platform.js');
 
-var url = 'https://github.com/jinjor/Showit/releases/download/' + platform.version + '/' + platform.compilerName;
+var url = 'https://github.com/jinjor/Showit/releases/download/' +
+  platform.version + '/' + platform.compilerNameForRelease;
 fs.ensureDirSync(platform.compilerDir);
 request(url).pipe(fs.createWriteStream(platform.compilerPath), function(e) {
   if(e) {
