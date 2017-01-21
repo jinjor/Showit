@@ -2,7 +2,14 @@
   "name": "showit",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "preferGlobal": true,
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jinjor/Showit.git"
+  },
+  "homepage": "https://github.com/jinjor/Showit",
+  "bugs": "https://github.com/jinjor/Showit/issues",
   "bin": {
     "showit": "./bin/showit",
     "showit-edit": "./bin/showit-edit",
@@ -14,11 +21,25 @@
     "test": "test"
   },
   "scripts": {
-    "install": "node scripts/install.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install": "node scripts/install.js"
   },
+  "files": [
+    "lib",
+    "scripts",
+    "bin"
+  ],
+  "keywords": [
+    "bin",
+    "binary",
+    "binaries",
+    "showit",
+    "showit-new",
+    "showit-edit",
+    "showit-compile",
+    "language",
+    "compiler"
+  ],
   "author": "Yosuke Torii <jinjorweb@gmail.com> (https://github.com/jinjor)",
-  "license": "BSD3-Clause",
   "dependencies": {
     "argv": "0.0.2",
     "express": "^4.14.0",

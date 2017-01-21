@@ -1,17 +1,27 @@
+# elm
 elm-stuff
+
+# haskell
 .stack-work
+
+# node
 node_modules
 npm-debug.log
-.showit
 
+# lib
 codemirror
-
-.DS_Store
-docs
-example
-lib/scaffold/showit-runtime.js
 lib/public/codemirror.js
 lib/public/codemirror.css
 lib/public/ambiance.css
+
+# build
+lib/scaffold/showit-runtime.js
+
+# mac
+.DS_Store
+
+# others
+example
 platform
 tmp
+docs
